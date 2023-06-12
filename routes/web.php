@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginRegisterController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\IndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +16,11 @@ use App\Http\Controllers\Auth\LoginRegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-/*
+
 Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
@@ -27,4 +29,16 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::post('/logout', 'logout')->name('logout');
 });
-*/
+
+Route::prefix('/admin')->controller(AdminController::class)->group(function(){
+    Route::match(['get','post'], '/login','login')->name('login');
+
+    Route::group(['middleware'=>['admin'] ], function() {
+    Route::get('/dashboard','dashboard')->name('dashboard'); 
+    Route::match(['get','post'], '/logout','logout')->name('logout');
+  });
+
+});
+
+Route::match(['get','post'], '/', [IndexController::class, 'index'])->name('home');
+Route::get('change/lang', [IndexController::class, 'changeLanguage'])->name('LangChange');
