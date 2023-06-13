@@ -64,7 +64,7 @@ footer {
 }
 
 body {
-    font-family: 'Roboto-Regular';
+    font-family: 'Roboto', sans-serif !important;
     color: #686868;
     background: #f0f0f0;
     height: 100%;
@@ -177,7 +177,8 @@ p {
 .logo-trti-title p {
     color: #312f9b;
     font-size: 18px;
-    font-family: 'Roboto-Bold';
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: bold;
     text-transform: uppercase;
     line-height: 14px;
 }
