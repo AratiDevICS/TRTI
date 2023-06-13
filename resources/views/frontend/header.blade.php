@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xml:lang="mr-in" lang="mr-in" class="no-js">
   <head>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
     <meta name="robots" content="index, follow" />
@@ -34,6 +36,8 @@
     <script src="{{ url('homepage/js/jquery.touchSwipe.min.js') }}" type="text/javascript"></script>
     <script src="{{ url('homepage/js/jquery.colorbox-min.js') }}" type="text/javascript"></script>
     <script src="{{ url('homepage/js/script.min.js(1)') }}" type="text/javascript"></script>
+   
+
     <!--[if lt IE 9]>
 			<script src="/media/system/js/html5fallback.js?02648cd33a8fa157f1c51d743cf6eb24" type="text/javascript"></script>
 			<![endif]-->
@@ -157,13 +161,13 @@
                   <a href="/index.php/calendar">{{ __('message.trti_calender') }}</a>
                 </li>
                 <li class="round-icons">
-                  <a class="small round-icons a-minus clsDecrease">A-</a>
+                  <a class="small round-icons a-minus clsDecrease" id="jfontsize-m">A-</a>
+                </li>
+                <li class="round-icons"> 
+                  <a class="normal round-icons a-normal clsNormal" id="jfontsize-d">A</a>
                 </li>
                 <li class="round-icons">
-                  <a class="normal round-icons a-normal clsNormal">A</a>
-                </li>
-                <li class="round-icons">
-                  <a class="large round-icons a-plus clsIncrease" id="btnFontIncrease">A+</a>
+                  <a class="large round-icons a-plus clsIncrease" id="jfontsize-p">A+</a>
                 </li>
                 <div class="clearfix"></div>
               </ul>
@@ -242,25 +246,29 @@
 
                   
                 @foreach ($main_menu as $mainmenu)
-                {{ echo $mainmenu->id }}
-                  @php $sub_menu = DB::table('trti_menu')->where->('parent_id',$mainmenu->id)->get();  
-                    @endphp
-                    {{ print_r($sub_menu) }}
+                @php $sub_menu = DB::table('trti_menu')->where('parent_id',$mainmenu->id)->where('published','1')->get();  @endphp
+                
+                    <!-- <pre> {{  print_r($sub_menu) }}  -->
                 
                 <li class="dropdown">
                   <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"> {{$mainmenu->title}} </a>
-                  <!-- <ul class="dropdown-menu">
+                  @if(!$sub_menu->isEmpty())
+                  <ul class="dropdown-menu">
+                  @foreach ($sub_menu as $subMenu)   
+                  @php $sub_menu1 = DB::table('trti_menu')->where('parent_id',$subMenu->id)->where('published','1')->get();  @endphp        
                     <li>
-                      <a href="/index.php/about-us/about-the-institution">संस्थे बद्दल </a>
+                      <a href="/index.php/about-us/about-the-institution">{{ $subMenu->title }} </a>
+                      <ul class="dropdown-menu">
+                        @foreach ($sub_menu1 as $subMenu1)  
+                       <li> <a href="#">{{ $subMenu1->title }} </a></li>
+                        @endforeach
+                    </ul>
                     </li>
-                    <li>
-                      <a href="/index.php/about-us/vision-and-mission">दृष्टी आणि कार्य </a>
-                    </li>
-                    <li>
-                      <a href="/index.php/about-us/gallery">गॅलरी </a>
-                    </li>
-                  </ul> -->
+                   @endforeach
+                  </ul> 
+                  @endif
                 </li>
+
                 @endforeach
              </ul>
             </div>
@@ -1593,7 +1601,7 @@
     <script src="{{ url('homepage/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('homepage/js/owl.carousel.min.js') }}"></script>
     <script src="{{ url('homepage/js/icheck.js') }}"></script>
-    <script type="text/javascript" src="{{ url('homepage/js/font-size.js') }}"></script>
+
 
     <script type="text/javascript">
       var url = "{{ route('LangChange') }}";
@@ -1604,5 +1612,17 @@
         window.location.href = url + "?lang="+ lang;
       }
     </script>
+
+<script src="{{ url('homepage/js/jquery.jfontsize-1.0.js'); }}"></script> 
+    <script type="text/javascript" language="javascript">
+    $('*').jfontsize({
+      btnMinusClasseId: '#jfontsize-m',
+      btnDefaultClasseId: '#jfontsize-d',  
+      btnPlusClasseId: '#jfontsize-p',
+      btnMinusMaxHits: 2,
+      btnPlusMaxHits:1 
+    });
+  </script> 
+      <!-- <script type="text/javascript" src="{{ url('homepage/js/font-size.js') }}"></script> -->
   </body>
 </html>
